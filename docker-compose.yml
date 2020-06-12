@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+    mysqlmem:
+        image: mysql:latest
+        restart: always
+        command: mysqld --default-authentication-plugin=mysql_native_password --plugin-load=libmemcached.so
+        container_name: wwwmaster
+        volumes:
+            - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+            - ./innodb_memcached_config.sql:/usr/share/mysql-8.0/innodb_memcached_config.sql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+        ports:
+           - "4311:3306"
+           - "4315:11211"
